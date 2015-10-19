@@ -1,9 +1,19 @@
 package uco_448237.movio.pv526.fi.muni.cz.ukol3;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.adapters.MovieGridViewAdapter;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.models.Movie;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -11,6 +21,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Singleton.getInstance(); // Init singleton
+
+        final List<Movie> myMovieList = new ArrayList<>();
+        MovieGridViewAdapter movieGridViewAdapter = new MovieGridViewAdapter(this, myMovieList);
+        GridView gridView = (GridView) findViewById(R.id.movies_gridview);
+        gridView.setAdapter(movieGridViewAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Select movie
+                Singleton.setSelectedMovie(myMovieList.get(position));
+                // Start new activity
+                Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Add data
+        myMovieList.add(new Movie(1, R.drawable.m1, "Jurassic World"));
+        myMovieList.add(new Movie(1, R.drawable.m2, "Big Six"));
+        myMovieList.add(new Movie(1, R.drawable.m3, "Pixels"));
+        myMovieList.add(new Movie(1, R.drawable.m4, "Mad Max"));
+        myMovieList.add(new Movie(1, R.drawable.m5, "San Andreas"));
+        myMovieList.add(new Movie(1, R.drawable.m6, "Terminator: Genesis"));
+
     }
 
     @Override
