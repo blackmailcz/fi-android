@@ -1,4 +1,4 @@
-package uco_448237.movio.pv526.fi.muni.cz.ukol3;
+package uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton;
 
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.models.Movie;
 

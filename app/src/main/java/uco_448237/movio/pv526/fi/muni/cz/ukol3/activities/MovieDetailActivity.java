@@ -1,4 +1,4 @@
-package uco_448237.movio.pv526.fi.muni.cz.ukol3;
+package uco_448237.movio.pv526.fi.muni.cz.ukol3.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,9 +7,8 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import uco_448237.movio.pv526.fi.muni.cz.ukol3.models.Movie;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton.Singleton;
 
 /**
  * Created by BlackMail on 19.10.2015.

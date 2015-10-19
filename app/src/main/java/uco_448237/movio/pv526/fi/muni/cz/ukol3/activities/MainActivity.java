@@ -1,4 +1,4 @@
-package uco_448237.movio.pv526.fi.muni.cz.ukol3;
+package uco_448237.movio.pv526.fi.muni.cz.ukol3.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -12,8 +12,10 @@ import android.widget.GridView;
 import java.util.ArrayList;
 import java.util.List;
 
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.adapters.MovieGridViewAdapter;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.models.Movie;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton.Singleton;
 
 public class MainActivity extends AppCompatActivity {
 
