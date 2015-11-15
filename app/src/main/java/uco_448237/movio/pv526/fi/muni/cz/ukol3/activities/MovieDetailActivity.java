@@ -1,33 +1,39 @@
 package uco_448237.movio.pv526.fi.muni.cz.ukol3.activities;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton.Singleton;
 
-/**
- * Created by BlackMail on 19.10.2015.
- */
 public class MovieDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.moviedetail);
+        setContentView(R.layout.activity_movie_detail);
 
-        // Set data do display
-        if (Singleton.getSelectedMovie() != null) {
-            TextView releaseDateTV = (TextView) findViewById(R.id.details_release_date);
-            releaseDateTV.setText(Long.toString(Singleton.getSelectedMovie().getReleaseDate()));
-            TextView nameTV = (TextView) findViewById(R.id.details_name);
-            nameTV.setText(Singleton.getSelectedMovie().getTitle());
-            ImageView coverIV = (ImageView) findViewById(R.id.details_cover);
-            coverIV.setImageResource(Singleton.getSelectedMovie().getCoverPath());
+        Log.w("tag", "STARTING ACTIVITY");
+        Bundle bundle = getIntent().getExtras();
+
+        FragmentManager fm = getFragmentManager();
+        Fragment detailFragment = fm.findFragmentById(R.id.movie_detail_container);
+        // Create empty movie detail
+        if (detailFragment == null) {
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.add(R.id.movie_detail_container, MovieDetailFragment.getInstance(bundle), MovieDetailFragment.TAG);
+            ft.commit();
         }
     }
 
@@ -52,4 +58,5 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
