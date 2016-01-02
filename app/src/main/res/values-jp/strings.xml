@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">JA NEUMELA TAPONSKI</string>
+
+    <string name="hello_world">Titapadetat!</string>
+    <string name="action_settings">Devat</string>
+    <string name="release_date">Tetepadetat:</string>
+    <string name="name">Ti koupila:</string>
+    <string name="movie_details">Nemam jinou velikost</string>
+    <string name="title_activity_movie_detail">tiattitituaita</string>
+</resources>

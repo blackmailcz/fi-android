@@ -16,6 +16,7 @@ import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
 
 import java.util.ArrayList;
 
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.BuildConfig;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.adapters.MovieGridViewAdapter;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.models.Movie;
@@ -39,7 +40,9 @@ public class SelectMovieFragment extends Fragment {
         if (getArguments() != null) {
             movieSections = getArguments().getParcelableArrayList("movie_sections");
         }
-        Log.w(SelectMovieFragment.TAG, "Fragment onCreate is called");
+        if (BuildConfig.logging) {
+            Log.w(SelectMovieFragment.TAG, "Fragment onCreate is called");
+        }
     }
 
     public static SelectMovieFragment getInstance (Bundle data) {
@@ -65,7 +68,9 @@ public class SelectMovieFragment extends Fragment {
                 Bundle args = new Bundle();
                 // We have to pass the data using parcelable, so we parcel a list item
                 if (movieSections != null) {
-                    Log.w("tag","## Packing parcel...");
+                    if (BuildConfig.logging) {
+                        Log.w("tag", "## Packing parcel...");
+                    }
                     args.putParcelable("selected_movie", (Movie) movieGridViewAdapter.getItem(position));
                 }
                 MovieDetailFragment movieDetailFragment = MovieDetailFragment.getInstance(args);

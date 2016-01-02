@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.BuildConfig;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton.Singleton;
 
@@ -24,7 +25,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
 
-        Log.w("tag", "STARTING ACTIVITY");
+        if (BuildConfig.logging) {
+            Log.w("tag", "STARTING ACTIVITY");
+        }
         Bundle bundle = getIntent().getExtras();
 
         FragmentManager fm = getFragmentManager();

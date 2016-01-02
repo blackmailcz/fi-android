@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.BuildConfig;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.models.Movie;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.models.MovieSection;
@@ -67,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
             ft.add(R.id.listcontainer, selectMovieFragment, SelectMovieFragment.TAG);
             ft.commit();
             // Log to make sure the fragment is created only once
-            Log.w(SelectMovieFragment.TAG, "Fragment is created");
+            if (BuildConfig.logging) {
+                Log.w(SelectMovieFragment.TAG, "Fragment is created");
+            }
         }
         // If we are using tablet...
         if (Singleton.getInstance().isTablet(this)) {
@@ -80,7 +83,9 @@ public class MainActivity extends AppCompatActivity {
             // Also, enable the view
             FrameLayout rightFragmentContainer = (FrameLayout) findViewById(R.id.tabletdetailscontainer);
             rightFragmentContainer.setVisibility(View.VISIBLE);
-            Log.e("??","SETTING VISIBLE");
+            if (BuildConfig.logging) {
+                Log.e("??", "SETTING VISIBLE");
+            }
         }
     }
 

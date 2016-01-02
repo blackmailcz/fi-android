@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.BuildConfig;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.models.Movie;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton.Singleton;
@@ -32,7 +33,9 @@ public class MovieDetailFragment extends Fragment {
         if (getArguments() != null) {
             selectedMovie = getArguments().getParcelable("selected_movie");
         }
-        Log.w(MovieDetailFragment.TAG, "Fragment onCreate is called");
+        if (BuildConfig.logging) {
+            Log.w(MovieDetailFragment.TAG, "Fragment onCreate is called");
+        }
     }
 
     @Nullable

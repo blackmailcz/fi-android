@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Úkol3</string>
+
+    <string name="hello_world">Ahoj světe!</string>
+    <string name="action_settings">Nastavení</string>
+    <string name="release_date">Datum vydání:</string>
+    <string name="name">Název:</string>
+    <string name="movie_details">Detaily filmu</string>
+    <string name="title_activity_movie_detail">Zobrazení detailů</string>
+</resources>
