@@ -3,40 +3,48 @@ package uco_448237.movio.pv526.fi.muni.cz.ukol3.activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.os.AsyncTask;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import com.google.gson.GsonBuilder;
-import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.BuildConfig;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
-import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.Movie;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.MovieSection;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.networking.ConnectionChecker;
-import uco_448237.movio.pv526.fi.muni.cz.ukol3.networking.HttpClient;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.networking.DownloadService;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton.Singleton;
 
 public class MainActivity extends AppCompatActivity implements ConnectionCheckerDialog.ConnectionCheckerDialogListener {
 
     private ArrayList<MovieSection> movieSections;
+    private DownloadResponseReceiver downloadResponseReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Register receiver
+        IntentFilter filter = new IntentFilter(DownloadResponseReceiver.ACTION_RESP);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        downloadResponseReceiver = new DownloadResponseReceiver();
+        registerReceiver(downloadResponseReceiver, filter);
+
 
         // If the activity is created for the first time, create data as well
         // If not, load previously created data from parcel
@@ -119,14 +127,23 @@ public class MainActivity extends AppCompatActivity implements ConnectionChecker
     }
 
     @Override
+    public void onStop() {
+        try {
+            unregisterReceiver(downloadResponseReceiver);
+        } catch (IllegalArgumentException e) {
+            // Receiver was already unregistered for some reason
+        }
+        super.onStop();
+    }
+
+    @Override
     public void onConnectionCheckerDialogYes() {
         checkAndDownload();
     }
 
     @Override
     public void onConnectionCheckerDialogNo() {
-        // Exit
-        finish();
+        // Pass
     }
 
     public void checkAndDownload() {
@@ -143,9 +160,11 @@ public class MainActivity extends AppCompatActivity implements ConnectionChecker
             }
         } while (tryToReconnect[0]);
         if (connectionSuccessful) {
-            // Start async task
+            Intent intent = new Intent(Intent.ACTION_SYNC, null, this, DownloadService.class);
+            startService(intent);
+            /*// Start async task
             DownloadTask downloadTask = new DownloadTask();
-            downloadTask.execute();
+            downloadTask.execute();*/
         }
     }
 
@@ -165,6 +184,46 @@ public class MainActivity extends AppCompatActivity implements ConnectionChecker
         });
     }
 
+    public void showNotification (String header, String text) {
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.warning_icon)
+                        .setContentTitle(header)
+                        .setContentText(text)
+                        .setContentIntent(contentIntent);
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.notify(0, mBuilder.build());
+
+    }
+
+    public class DownloadResponseReceiver extends BroadcastReceiver {
+
+        public static final String ACTION_RESP = "uco_448237.movio.pv526.fi.muni.cz.ukol3.intent.action.MESSAGE_PROCESSED";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get status
+            boolean status = intent.getExtras().getBoolean("is_ok");
+            if (!status) {
+                Log.e("ERROR","Download failed");
+                showNotification(getString(R.string.warning), getString(R.string.download_parsing_failed));
+            } else {
+                // Get data
+                ArrayList<MovieSection> downloadedSections = intent.getParcelableArrayListExtra("downloaded_sections");
+                for (MovieSection section : downloadedSections) {
+                    Singleton.getMovieData().add(section);
+                }
+                // Notify
+                showNotification(getString(R.string.info), getString(R.string.download_complete));
+                // Update view
+                notifyMovieAdapterUpdate();
+            }
+        }
+    }
+
+
+/*
     private class DownloadTask extends AsyncTask<Void, String, Integer> {
 
         private DownloadProgressDialog downloadDialog;
@@ -223,5 +282,5 @@ public class MainActivity extends AppCompatActivity implements ConnectionChecker
             downloadDialog.dismiss();
         }
     }
-
+*/
 }
