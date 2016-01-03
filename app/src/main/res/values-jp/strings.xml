@@ -13,4 +13,7 @@
     <string name="downloading_images">Downloading images...</string>
     <string name="warning">Warning</string>
     <string name="internet_na_try_again">Internet connection is not available. Try again?</string>
+    <string name="download_parsing_failed">Download or parsing failed</string>
+    <string name="info">Info</string>
+    <string name="download_complete">Download complete</string>
 </resources>

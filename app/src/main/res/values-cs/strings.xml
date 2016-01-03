@@ -17,4 +17,7 @@
     <string name="downloading_images">Stahuji obrázky …</string>
     <string name="warning">Varování</string>
     <string name="internet_na_try_again">Internetové připojení není dostupné. Zkusit znovu?</string>
+    <string name="download_parsing_failed">Stahování nebo parsování dat selhalo</string>
+    <string name="info">Info</string>
+    <string name="download_complete">Stahování dokončeno</string>
 </resources>
