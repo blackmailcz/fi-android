@@ -1,4 +1,4 @@
-package uco_448237.movio.pv526.fi.muni.cz.ukol3.activities;
+package uco_448237.movio.pv526.fi.muni.cz.ukol3.activity;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -12,15 +12,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.tonicartos.widget.stickygridheaders.StickyGridHeadersGridView;
-
 import java.util.ArrayList;
 
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.BuildConfig;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
-import uco_448237.movio.pv526.fi.muni.cz.ukol3.adapters.MovieGridViewAdapter;
-import uco_448237.movio.pv526.fi.muni.cz.ukol3.models.Movie;
-import uco_448237.movio.pv526.fi.muni.cz.ukol3.models.MovieSection;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.adapter.MovieGridViewAdapter;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.Movie;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.MovieSection;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton.Singleton;
 
 /**
@@ -33,6 +31,9 @@ public class SelectMovieFragment extends Fragment {
 
     // Data
     private ArrayList<MovieSection> movieSections;
+
+    // Adapter (to be refreshed from outside)
+    public MovieGridViewAdapter movieGridViewAdapter;
 
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +58,7 @@ public class SelectMovieFragment extends Fragment {
             return null;
         }
         View rootView = inflater.inflate(R.layout.select_movie, container, false);
-        final MovieGridViewAdapter movieGridViewAdapter = new MovieGridViewAdapter(getActivity(), movieSections);
+        movieGridViewAdapter = new MovieGridViewAdapter(getActivity(), movieSections);
         GridView gridView = (GridView) rootView.findViewById(R.id.movies_gridview);
         gridView.setAdapter(movieGridViewAdapter);
         gridView.setEmptyView(rootView.findViewById(R.id.no_movie_selected_text));

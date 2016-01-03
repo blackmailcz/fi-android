@@ -1,4 +1,4 @@
-package uco_448237.movio.pv526.fi.muni.cz.ukol3.activities;
+package uco_448237.movio.pv526.fi.muni.cz.ukol3.activity;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -10,10 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.BuildConfig;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
-import uco_448237.movio.pv526.fi.muni.cz.ukol3.models.Movie;
-import uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton.Singleton;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.Movie;
 
 /**
  * Created by BlackMail on 26.10.2015.
@@ -51,11 +52,11 @@ public class MovieDetailFragment extends Fragment {
         } else {
             rootView = inflater.inflate(R.layout.movie_detail, container, false);
             TextView releaseDateTV = (TextView) rootView.findViewById(R.id.details_release_date);
-            releaseDateTV.setText(Long.toString(selectedMovie.getReleaseDate()));
+            releaseDateTV.setText(selectedMovie.getReleaseDate());
             TextView nameTV = (TextView) rootView.findViewById(R.id.details_name);
             nameTV.setText(selectedMovie.getTitle());
             ImageView coverIV = (ImageView) rootView.findViewById(R.id.details_cover);
-            coverIV.setImageResource(selectedMovie.getCoverPath());
+            Picasso.with(getActivity()).load(Movie.BASE_URL + selectedMovie.getCoverPath()).placeholder(R.drawable.image_not_available).into(coverIV);
         }
         return rootView;
     }

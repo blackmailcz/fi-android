@@ -7,4 +7,10 @@
     <string name="name">Ti koupila:</string>
     <string name="movie_details">Nemam jinou velikost</string>
     <string name="title_activity_movie_detail">tiattitituaita</string>
+    <string name="now_playing_in_cinemas">Sufuski</string>
+    <string name="upcoming_movies">Upcoming movies</string>
+    <string name="processing_data">Processing data...</string>
+    <string name="downloading_images">Downloading images...</string>
+    <string name="warning">Warning</string>
+    <string name="internet_na_try_again">Internet connection is not available. Try again?</string>
 </resources>

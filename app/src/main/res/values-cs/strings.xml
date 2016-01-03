@@ -7,4 +7,14 @@
     <string name="name">Název:</string>
     <string name="movie_details">Detaily filmu</string>
     <string name="title_activity_movie_detail">Zobrazení detailů</string>
+    <string name="now_playing_in_cinemas">Právě hrají v kinech</string>
+    <string name="upcoming_movies">Brzy bude vydáno</string>
+    <string name="downloading_data">Aktualizuji data …</string>
+    <string name="connecting">Připojování …</string>
+    <string name="yes">Ano</string>
+    <string name="no">Ne</string>
+    <string name="processing_data">Zpracovávám data …</string>
+    <string name="downloading_images">Stahuji obrázky …</string>
+    <string name="warning">Varování</string>
+    <string name="internet_na_try_again">Internetové připojení není dostupné. Zkusit znovu?</string>
 </resources>

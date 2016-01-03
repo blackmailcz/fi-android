@@ -1,4 +1,4 @@
-package uco_448237.movio.pv526.fi.muni.cz.ukol3.adapters;
+package uco_448237.movio.pv526.fi.muni.cz.ukol3.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,35 +6,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.tonicartos.widget.stickygridheaders.StickyGridHeadersBaseAdapter;
 
 import java.util.ArrayList;
 
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
-import uco_448237.movio.pv526.fi.muni.cz.ukol3.models.Movie;
-import uco_448237.movio.pv526.fi.muni.cz.ukol3.models.MovieSection;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.Movie;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.MovieSection;
 
 /**
  * Created by BlackMail on 18.10.2015.
  */
 public class MovieGridViewAdapter extends BaseAdapter implements StickyGridHeadersBaseAdapter {
 
-    private Context mContext;
-    private ArrayList<MovieSection> mData;
+    private Context context;
+    private ArrayList<MovieSection> data;
 
     public MovieGridViewAdapter (Context context, ArrayList<MovieSection> data) {
-        this.mContext = context;
-        this.mData = data;
+        this.context = context;
+        this.data = data;
     }
 
     @Override
     public int getCount() {
-        if (mData != null) {
+        if (this.data != null) {
             int size = 0;
-            for (MovieSection movieSection : mData) {
+            for (MovieSection movieSection : this.data) {
                 size += movieSection.getMovies().size();
             }
             return size;
@@ -45,9 +45,9 @@ public class MovieGridViewAdapter extends BaseAdapter implements StickyGridHeade
 
     @Override
     public Object getItem(int position) {
-        if(mData != null) {
+        if(this.data != null) {
             int current = 0;
-            for (MovieSection movieSection : mData) {
+            for (MovieSection movieSection : this.data) {
                 for (Movie movie : movieSection.getMovies()) {
                     if (current == position) {
                         return movie;
@@ -68,8 +68,8 @@ public class MovieGridViewAdapter extends BaseAdapter implements StickyGridHeade
 
     @Override
     public int getCountForHeader(int i) {
-        if (mData != null) {
-            return mData.get(i).getMovies().size();
+        if (this.data != null) {
+            return this.data.get(i).getMovies().size();
         } else {
             return 0;
         }
@@ -77,8 +77,8 @@ public class MovieGridViewAdapter extends BaseAdapter implements StickyGridHeade
 
     @Override
     public int getNumHeaders() {
-        if (mData != null) {
-            return mData.size();
+        if (this.data != null) {
+            return this.data.size();
         } else {
             return 0;
         }
@@ -88,7 +88,7 @@ public class MovieGridViewAdapter extends BaseAdapter implements StickyGridHeade
     public View getHeaderView(int position, View convertView, ViewGroup parent) {
         TextViewHolder holder;
         if (convertView == null) {
-            LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+            LayoutInflater layoutInflater = LayoutInflater.from(this.context);
             convertView = layoutInflater.inflate(R.layout.section_header, parent, false);
             holder = new TextViewHolder();
             holder.txt = (TextView) convertView.findViewById(R.id.section_header_text);
@@ -96,8 +96,8 @@ public class MovieGridViewAdapter extends BaseAdapter implements StickyGridHeade
         } else {
             holder = (TextViewHolder) convertView.getTag();
         }
-        if (mData != null) {
-            holder.txt.setText(mData.get(position).getSectionName());
+        if (this.data != null) {
+            holder.txt.setText(this.data.get(position).getSectionName());
         }
         return convertView;
     }
@@ -113,16 +113,17 @@ public class MovieGridViewAdapter extends BaseAdapter implements StickyGridHeade
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.movie_grid_view_row,parent,false);
             ImageViewHolder holder = new ImageViewHolder();
             holder.img = (ImageView) convertView.findViewById(R.id.movie_grid_view_row_image_view);
             convertView.setTag(holder);
         }
-        if (mData != null) {
+        if (this.data != null) {
             ImageViewHolder holder = (ImageViewHolder) convertView.getTag();
             Movie currentMovie = (Movie) getItem(position);
-            holder.img.setImageResource(currentMovie.getCoverPath());
+            Picasso.with(context).load(Movie.BASE_URL + currentMovie.getCoverPath()).placeholder(R.drawable.image_not_available).noFade().into(holder.img);
+
         }
         return convertView;
     }

@@ -1,7 +1,9 @@
-package uco_448237.movio.pv526.fi.muni.cz.ukol3.models;
+package uco_448237.movio.pv526.fi.muni.cz.ukol3.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
@@ -10,6 +12,7 @@ import java.util.ArrayList;
  */
 public class MovieSection implements Parcelable {
 
+    @SerializedName("results")
     private ArrayList<Movie> movies;
     private String sectionName;
 
@@ -27,8 +30,14 @@ public class MovieSection implements Parcelable {
         return sectionName;
     }
 
+    public void setSectionName(String sectionName) { this.sectionName = sectionName; }
+
     public ArrayList<Movie> getMovies() {
         return movies;
+    }
+
+    public void addMovie(Movie movie) {
+        this.movies.add(movie);
     }
 
     @Override
