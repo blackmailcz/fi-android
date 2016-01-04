@@ -3,14 +3,20 @@ package uco_448237.movio.pv526.fi.muni.cz.ukol3.activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.LoaderManager;
+import android.content.Loader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.BuildConfig;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.db.MovieAsyncTaskLoader;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.Movie;
 
 public class MovieDetailActivity extends AppCompatActivity {
 

@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Created by BlackMail on 28.10.2015.
@@ -13,11 +15,15 @@ import java.util.ArrayList;
 public class MovieSection implements Parcelable {
 
     @SerializedName("results")
-    private ArrayList<Movie> movies;
+    private ArrayList<Movie> movies = new ArrayList<>();
     private String sectionName;
 
     public MovieSection(String sectionName, ArrayList<Movie> movies) {
         this.movies = movies;
+        this.sectionName = sectionName;
+    }
+
+    public MovieSection(String sectionName) {
         this.sectionName = sectionName;
     }
 
@@ -38,6 +44,20 @@ public class MovieSection implements Parcelable {
 
     public void addMovie(Movie movie) {
         this.movies.add(movie);
+    }
+
+    public void addAllMovies(Collection<Movie> movies) {
+        this.movies.addAll(movies);
+    }
+
+    public void removeById(int id) {
+        Iterator<Movie> iterator = movies.iterator();
+        while (iterator.hasNext()) {
+            Movie movie = iterator.next();
+            if (movie.getMovieId() == id) {
+                movies.remove(movie);
+            }
+        }
     }
 
     @Override

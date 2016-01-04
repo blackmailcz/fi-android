@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/movie_detail_bg">
 
     <LinearLayout
         android:orientation="vertical"
@@ -10,7 +13,7 @@
         android:layout_gravity="center_horizontal">
 
         <ScrollView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/scrollView2"
             android:layout_gravity="center_horizontal" >
@@ -18,28 +21,20 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="wrap_content"
+                android:padding="5dp">
 
                 <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="5dp" >
+                    android:layout_gravity="center_horizontal">
 
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="wrap_content"
+                    <FrameLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp" >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/release_date"
-                            android:id="@+id/textView2"
-                            android:layout_gravity="left|center_horizontal" />
+                        android:layout_gravity="center_horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -47,28 +42,40 @@
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="@string/name"
                             android:id="@+id/textView3"
-                            android:layout_gravity="left|center_horizontal" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
+                            android:layout_gravity="left"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="Medium Text"
-                            android:id="@+id/details_release_date" />
+                            android:id="@+id/details_name"
+                            android:layout_gravity="right"
+                            android:textAlignment="gravity" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/release_date"
+                            android:id="@+id/textView2"
+                            android:layout_gravity="left|center_horizontal"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="Medium Text"
-                            android:id="@+id/details_name" />
-                    </LinearLayout>
+                            android:id="@+id/details_release_date"
+                            android:layout_gravity="right" />
+                    </FrameLayout>
                 </LinearLayout>
 
                 <ImageView
@@ -77,8 +84,28 @@
                     android:id="@+id/details_cover"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="10dp"
-                    android:adjustViewBounds="true" />
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/movie_detail_poster" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/ly_bar_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/button_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="28dp"
+            android:src="@drawable/plus_icon"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:pressedTranslationZ="12dp" />
+    </LinearLayout>
+</RelativeLayout>

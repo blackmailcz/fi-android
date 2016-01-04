@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.GridView;
+import android.widget.Switch;
 
 import java.util.ArrayList;
 
@@ -24,7 +26,7 @@ import uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton.Singleton;
 /**
  * Created by BlackMail on 26.10.2015.
  */
-public class SelectMovieFragment extends Fragment {
+public class SelectMovieFragment extends Fragment implements Switch.OnCheckedChangeListener {
 
     // Tag
     public static final String TAG = SelectMovieFragment.class.getSimpleName();
@@ -34,6 +36,9 @@ public class SelectMovieFragment extends Fragment {
 
     // Adapter (to be refreshed from outside)
     public MovieGridViewAdapter movieGridViewAdapter;
+
+    // Switch
+    Switch sourceSwitch;
 
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,10 +63,14 @@ public class SelectMovieFragment extends Fragment {
             return null;
         }
         View rootView = inflater.inflate(R.layout.select_movie, container, false);
+        // Switch
+        sourceSwitch = (Switch) rootView.findViewById(R.id.discover_switch);
+        sourceSwitch.setOnCheckedChangeListener(this);
+        // GridView
         movieGridViewAdapter = new MovieGridViewAdapter(getActivity(), movieSections);
         GridView gridView = (GridView) rootView.findViewById(R.id.movies_gridview);
         gridView.setAdapter(movieGridViewAdapter);
-        gridView.setEmptyView(rootView.findViewById(R.id.no_movie_selected_text));
+        gridView.setEmptyView(rootView.findViewById(R.id.movies_gridview_empty));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -90,5 +99,29 @@ public class SelectMovieFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    public void setMovieSections(ArrayList<MovieSection> movieSections) {
+        this.movieSections = movieSections;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        // Change text
+        if (sourceSwitch.isChecked()) {
+            sourceSwitch.setText(R.string.favorites);
+        } else {
+            sourceSwitch.setText(R.string.discover);
+        }
+        // Try to call listener in main activity, if it is implemented. If not, pass.
+        try {
+            ((OnSwitchChangeCustomListener) getActivity()).OnSwitchChanged(!sourceSwitch.isChecked());
+        } catch (ClassCastException e) {
+            // pass
+        }
+    }
+
+    public interface OnSwitchChangeCustomListener {
+        void OnSwitchChanged(boolean fromNetwork);
     }
 }

@@ -5,18 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.google.gson.GsonBuilder;
-import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
-import retrofit.RetrofitError;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.activity.MainActivity;
-import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.Movie;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.MovieSection;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton.Singleton;
 

@@ -16,4 +16,9 @@
     <string name="download_parsing_failed">Download or parsing failed</string>
     <string name="info">Info</string>
     <string name="download_complete">Download complete</string>
+    <string name="movie_detail_poster">Movie detail poster</string>
+    <string name="discover">Some string resource</string>
+    <string name="favorites">Favorites</string>
+    <string name="favorite_movies">Oblíbené filmy</string>
+    <string name="no_movie_selected">No movie available</string>
 </resources>

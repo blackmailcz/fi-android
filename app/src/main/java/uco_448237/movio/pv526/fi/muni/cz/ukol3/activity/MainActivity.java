@@ -3,12 +3,14 @@ package uco_448237.movio.pv526.fi.muni.cz.ukol3.activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.LoaderManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.Loader;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,18 +23,23 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.BuildConfig;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.db.MovieAsyncTaskLoader;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.Movie;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.MovieSection;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.networking.ConnectionChecker;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.networking.DownloadService;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton.Singleton;
 
-public class MainActivity extends AppCompatActivity implements ConnectionCheckerDialog.ConnectionCheckerDialogListener {
+public class MainActivity extends AppCompatActivity implements ConnectionCheckerDialog.ConnectionCheckerDialogListener,
+        SelectMovieFragment.OnSwitchChangeCustomListener, LoaderManager.LoaderCallbacks<List<Movie>> {
 
     private ArrayList<MovieSection> movieSections;
     private DownloadResponseReceiver downloadResponseReceiver;
+    private boolean displayFromNetwork = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,16 +52,22 @@ public class MainActivity extends AppCompatActivity implements ConnectionChecker
         downloadResponseReceiver = new DownloadResponseReceiver();
         registerReceiver(downloadResponseReceiver, filter);
 
+        // Create DB section if empty
+        if (Singleton.getDbMovieData().isEmpty()) {
+            MovieSection dbSection = new MovieSection(getString(R.string.favorite_movies));
+            Singleton.getDbMovieData().add(dbSection);
+        }
 
         // If the activity is created for the first time, create data as well
         // If not, load previously created data from parcel
         if (savedInstanceState == null) {
             // Create new section list
-            movieSections = Singleton.getMovieData();
+            movieSections = Singleton.getDisplayedData();
             // Download data if possible
             checkAndDownload();
         } else {
             // Get data from parcel.
+            displayFromNetwork = savedInstanceState.getBoolean("display_from_network");
             movieSections = savedInstanceState.getParcelableArrayList("movie_sections");
         }
 
@@ -122,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionChecker
     @Override
     public void onSaveInstanceState (Bundle outState) {
         // Save the data to a bundle when the activity dies
+        outState.putBoolean("display_from_network", displayFromNetwork);
         outState.putParcelableArrayList("movie_sections",movieSections);
         super.onSaveInstanceState(outState);
     }
@@ -147,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements ConnectionChecker
     }
 
     public void checkAndDownload() {
+        Log.w("CHECK", "Check connection");
         // Check online state
         boolean connectionSuccessful = false;
         final boolean[] tryToReconnect = {false};
@@ -162,9 +177,6 @@ public class MainActivity extends AppCompatActivity implements ConnectionChecker
         if (connectionSuccessful) {
             Intent intent = new Intent(Intent.ACTION_SYNC, null, this, DownloadService.class);
             startService(intent);
-            /*// Start async task
-            DownloadTask downloadTask = new DownloadTask();
-            downloadTask.execute();*/
         }
     }
 
@@ -173,12 +185,16 @@ public class MainActivity extends AppCompatActivity implements ConnectionChecker
         uiCallback.post(new Runnable() {
             @Override
             public void run() {
-                FragmentManager fm = getFragmentManager();
-                Fragment listFragment = fm.findFragmentById(R.id.listcontainer);
-                if (listFragment != null) {
-                    if (((SelectMovieFragment) listFragment).movieGridViewAdapter != null) {
-                        ((SelectMovieFragment) listFragment).movieGridViewAdapter.notifyDataSetChanged();
+                try {
+                    FragmentManager fm = getFragmentManager();
+                    Fragment listFragment = fm.findFragmentById(R.id.listcontainer);
+                    if (listFragment != null) {
+                        if (((SelectMovieFragment) listFragment).movieGridViewAdapter != null) {
+                            ((SelectMovieFragment) listFragment).movieGridViewAdapter.notifyDataSetChanged();
+                        }
                     }
+                } catch (ClassCastException e) {
+                    // Pass
                 }
             }
         });
@@ -197,6 +213,80 @@ public class MainActivity extends AppCompatActivity implements ConnectionChecker
 
     }
 
+    @Override
+    public void OnSwitchChanged(boolean fromNetwork) {
+        // Set data source
+        if (fromNetwork) {
+            Singleton.getDisplayedData().clear();
+            Log.e("!!", "Network");
+            Singleton.getDisplayedData().addAll(Singleton.getNetworkMovieData());
+            if (Singleton.getDisplayedData().isEmpty()) {
+                checkAndDownload();
+            }
+            displayFromNetwork = true;
+            // Notify change
+            notifyMovieAdapterUpdate();
+        } else {
+            Log.e("!!", "DB");
+            updateFavListFromDB();
+        }
+    }
+
+    private void updateFavListFromDB() {
+        // Call loader
+        Bundle bundle = new Bundle();
+        bundle.putInt("action", MovieAsyncTaskLoader.ACTION_LOADALL);
+        bundle.putInt("movie_id", -1);
+        Loader loader = getLoaderManager().initLoader(0, bundle, this);
+        loader.forceLoad();
+        displayFromNetwork = false;
+        // Wait for response --> onLoadFinished
+    }
+
+    @Override
+    public Loader<List<Movie>> onCreateLoader(int id, Bundle args) {
+        Log.w("LOADER", "loader created");
+        return new MovieAsyncTaskLoader(getApplicationContext(), args);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Movie>> loader, List<Movie> data) {
+        Log.w("LOADER", "loader " + loader.getId() + "finished");
+        switch (loader.getId()) {
+            case 0:
+                // Mass DB loader
+                // Add data when finished.
+                Log.e("LOADER", "Loader finished");
+                if (data == null) {
+                    Log.w("LOADER", "Data loaded is null");
+                } else {
+                    // Erase old
+                    Singleton.getDbMovieData().get(0).getMovies().clear();
+                    // Add new
+                    Singleton.getDbMovieData().get(0).addAllMovies(data);
+                    // Make display
+                    Singleton.getDisplayedData().clear();
+                    Singleton.getDisplayedData().addAll(Singleton.getDbMovieData());
+                    notifyMovieAdapterUpdate();
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
+        // ..
+    }
+
+    @Override
+    protected void onResume() {
+        // Refresh DB
+        if (!displayFromNetwork) {
+            updateFavListFromDB();
+        }
+        super.onResume();
+    }
+
     public class DownloadResponseReceiver extends BroadcastReceiver {
 
         public static final String ACTION_RESP = "uco_448237.movio.pv526.fi.muni.cz.ukol3.intent.action.MESSAGE_PROCESSED";
@@ -211,76 +301,19 @@ public class MainActivity extends AppCompatActivity implements ConnectionChecker
             } else {
                 // Get data
                 ArrayList<MovieSection> downloadedSections = intent.getParcelableArrayListExtra("downloaded_sections");
+                Singleton.getNetworkMovieData().clear();
                 for (MovieSection section : downloadedSections) {
-                    Singleton.getMovieData().add(section);
+                    Singleton.getNetworkMovieData().add(section);
                 }
                 // Notify
                 showNotification(getString(R.string.info), getString(R.string.download_complete));
-                // Update view
-                notifyMovieAdapterUpdate();
-            }
-        }
-    }
-
-
-/*
-    private class DownloadTask extends AsyncTask<Void, String, Integer> {
-
-        private DownloadProgressDialog downloadDialog;
-        private HttpClient httpClient;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // Prepare download dialog
-            downloadDialog = new DownloadProgressDialog();
-            downloadDialog.show(getFragmentManager(), DownloadProgressDialog.TAG);
-            // Prepare http client
-            httpClient = new HttpClient();
-        }
-
-        @Override
-        protected Integer doInBackground(Void... params) {
-            try {
-                processSection("https://api.themoviedb.org/3/movie/now_playing?api_key="+Singleton.API_KEY+"&sort_by=avg_rating.desc", R.string.now_playing_in_cinemas);
-                processSection("https://api.themoviedb.org/3/movie/upcoming?api_key="+Singleton.API_KEY+"&sort_by=primary_release_date.asc", R.string.upcoming_movies);
-                notifyMovieAdapterUpdate();
-                publishProgress("Finished");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        private void processSection(String requestUrl, int sectionStringResource) {
-            publishProgress(getString(R.string.downloading_data) + ": " + getString(sectionStringResource));
-            try {
-                String response = httpClient.runRequest(requestUrl); // Run request
-                publishProgress(getString(R.string.processing_data));
-                MovieSection movieSection = new GsonBuilder().create().fromJson(response, MovieSection.class);
-                movieSection.setSectionName(getString(sectionStringResource));
-                publishProgress(getString(R.string.downloading_images) + ": " + getString(sectionStringResource));
-                for (Movie m : movieSection.getMovies()) {
-                    // Preload images
-                    Picasso.with(getApplicationContext()).load(m.getCoverPath()).fetch();
+                // Update display if network source is selected.
+                if (displayFromNetwork) {
+                    // Update data
+                    OnSwitchChanged(true);
                 }
-                movieSections.add(movieSection);
-            } catch (IOException e) {
-                Toast.makeText(getApplicationContext(), "Could not download the section: "+getString(sectionStringResource),Toast.LENGTH_SHORT).show();
             }
         }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            downloadDialog.getDialog().setTitle(values[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Integer integer) {
-            super.onPostExecute(integer);
-            // Hide dialog
-            downloadDialog.dismiss();
-        }
     }
-*/
+
 }

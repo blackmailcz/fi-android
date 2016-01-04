@@ -20,4 +20,9 @@
     <string name="download_parsing_failed">Stahování nebo parsování dat selhalo</string>
     <string name="info">Info</string>
     <string name="download_complete">Stahování dokončeno</string>
+    <string name="movie_detail_poster">Movie detail poster</string>
+    <string name="discover">Z internetu</string>
+    <string name="favorites">Oblíbené</string>
+    <string name="favorite_movies">Oblíbené filmy</string>
+    <string name="no_movie_selected">Žádný film k dispozici</string>
 </resources>

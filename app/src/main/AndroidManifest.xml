@@ -23,6 +23,10 @@
         </activity>
         <service android:name=".networking.DownloadService"
             android:exported="false" />
+        <provider
+            android:authorities="cz.blackmail.example.app"
+            android:exported="false"
+            android:name=".db.MovieContentProvider" />
 
     </application>
 

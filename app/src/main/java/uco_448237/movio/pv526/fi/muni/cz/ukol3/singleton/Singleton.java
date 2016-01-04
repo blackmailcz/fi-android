@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.res.Configuration;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.MovieSection;
 
 /**
@@ -18,7 +18,9 @@ public class Singleton {
 
     // Instance data
     private static Singleton instance = null;
-    private static ArrayList<MovieSection> movieData = new ArrayList<>();
+    private static ArrayList<MovieSection> displayedData = new ArrayList<>();
+    private static ArrayList<MovieSection> networkMovieData = new ArrayList<>();
+    private static ArrayList<MovieSection> dbMovieData = new ArrayList<>();
 
     public static Singleton getInstance() {
         if (instance == null) {
@@ -30,8 +32,26 @@ public class Singleton {
     private Singleton() {
     }
 
-    public static ArrayList<MovieSection> getMovieData() {
-        return Singleton.movieData;
+    public static ArrayList<MovieSection> getDisplayedData() {
+        return displayedData;
+    }
+
+    public static ArrayList<MovieSection> getNetworkMovieData() {
+        return Singleton.networkMovieData;
+    }
+
+    public static ArrayList<MovieSection> getDbMovieData() {
+        return dbMovieData;
+    }
+
+    public static void setDisplayedAsDb() {
+        Singleton.getDisplayedData().clear();
+        Singleton.getDisplayedData().addAll(Singleton.getDbMovieData());
+    }
+
+    public static void setDisplayedAsNetwork() {
+        Singleton.getDisplayedData().clear();
+        Singleton.getDisplayedData().addAll(Singleton.getNetworkMovieData());
     }
 
     public boolean isTablet(Context context) {
