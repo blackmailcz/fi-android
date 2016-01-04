@@ -21,4 +21,6 @@
     <string name="favorites">Favorites</string>
     <string name="favorite_movies">Oblíbené filmy</string>
     <string name="no_movie_selected">No movie available</string>
+    <string name="sync">Synchronization</string>
+    <string name="sync_done">Synchronization done</string>
 </resources>

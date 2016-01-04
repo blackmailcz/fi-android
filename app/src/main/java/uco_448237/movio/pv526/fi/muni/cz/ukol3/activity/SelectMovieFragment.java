@@ -101,10 +101,6 @@ public class SelectMovieFragment extends Fragment implements Switch.OnCheckedCha
         return rootView;
     }
 
-    public void setMovieSections(ArrayList<MovieSection> movieSections) {
-        this.movieSections = movieSections;
-    }
-
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         // Change text

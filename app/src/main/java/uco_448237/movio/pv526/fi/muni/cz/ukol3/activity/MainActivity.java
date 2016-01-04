@@ -33,6 +33,7 @@ import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.MovieSection;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.networking.ConnectionChecker;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.networking.DownloadService;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton.Singleton;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.sync.UpdaterSyncAdapter;
 
 public class MainActivity extends AppCompatActivity implements ConnectionCheckerDialog.ConnectionCheckerDialogListener,
         SelectMovieFragment.OnSwitchChangeCustomListener, LoaderManager.LoaderCallbacks<List<Movie>> {
@@ -45,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements ConnectionChecker
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Init sync adapter
+        UpdaterSyncAdapter.initializeSyncAdapter(this);
 
         // Register receiver
         IntentFilter filter = new IntentFilter(DownloadResponseReceiver.ACTION_RESP);

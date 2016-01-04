@@ -26,4 +26,8 @@
     <string name="favorites">Favorites</string>
     <string name="favorite_movies">Favorite movies</string>
     <string name="no_movie_selected">No movie available</string>
+    <string name="content_authority">cz.blackmail.example.app</string>
+    <string name="sync_account_type">example.com</string>
+    <string name="sync">Synchronization</string>
+    <string name="sync_done">Synchronization done</string>
 </resources>

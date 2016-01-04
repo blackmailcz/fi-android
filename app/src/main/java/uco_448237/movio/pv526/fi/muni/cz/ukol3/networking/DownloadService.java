@@ -32,10 +32,6 @@ public class DownloadService extends IntentService {
 
         Log.d(TAG, "Service started");
 
-        final ResultReceiver receiver = intent.getParcelableExtra("receiver");
-
-        Bundle bundle = new Bundle();
-
         boolean isOk = true;
         ArrayList<MovieSection> downloadedSections = new ArrayList<>();
 

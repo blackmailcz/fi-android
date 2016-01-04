@@ -1,7 +1,9 @@
 package uco_448237.movio.pv526.fi.muni.cz.ukol3.networking;
 
 import retrofit.http.GET;
+import retrofit.http.Path;
 import retrofit.http.Query;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.Movie;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.MovieSection;
 
 /**
@@ -14,5 +16,8 @@ public interface IApiService {
 
     @GET("/movie/upcoming")
     public MovieSection getUpcoming(@Query("api_key") String apiKey, @Query("sort_by") String sortBy);
+
+    @GET("/movie/{id}")
+    public Movie getMovieById(@Query("api_key") String apiKey, @Path("id") int id);
 
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Task3</string>
+    <string name="app_name">Awesome Movie Discover App</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -25,4 +25,6 @@
     <string name="favorites">Favorites</string>
     <string name="favorite_movies">Favorite movies</string>
     <string name="no_movie_selected">No movie available</string>
+    <string name="sync">Synchronization</string>
+    <string name="sync_done">Synchronization done</string>
 </resources>

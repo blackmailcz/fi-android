@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Úkol3</string>
+    <string name="app_name">Úžasná aplikace na nové filmy</string>
 
     <string name="hello_world">Ahoj světe!</string>
     <string name="action_settings">Nastavení</string>
@@ -25,4 +25,6 @@
     <string name="favorites">Oblíbené</string>
     <string name="favorite_movies">Oblíbené filmy</string>
     <string name="no_movie_selected">Žádný film k dispozici</string>
+    <string name="sync">Synchronizace</string>
+    <string name="sync_done">Synchronizace dokončena</string>
 </resources>
