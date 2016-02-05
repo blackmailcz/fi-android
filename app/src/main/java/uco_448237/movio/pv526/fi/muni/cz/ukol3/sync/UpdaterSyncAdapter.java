@@ -22,6 +22,8 @@ import java.util.List;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.R;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.db.MovieContentManager;
 import uco_448237.movio.pv526.fi.muni.cz.ukol3.model.Movie;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.networking.RetrofitRestClient;
+import uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton.Singleton;
 
 /**
  * Created by BlackMail on 4.1.2016.
@@ -131,11 +133,6 @@ public class UpdaterSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         Log.w("SYNC", "RUNNING SYNC [new]");
-        // Register receiver
-        IntentFilter filter = new IntentFilter(SyncUpdateReceiver.ACTION_RESP);
-        filter.addCategory(Intent.CATEGORY_DEFAULT);
-        SyncUpdateReceiver syncUpdateReceiver = new SyncUpdateReceiver();
-        mContext.registerReceiver(syncUpdateReceiver, filter);
 
         // DB API
         MovieContentManager manager = new MovieContentManager(mContext);
@@ -145,11 +142,31 @@ public class UpdaterSyncAdapter extends AbstractThreadedSyncAdapter {
         for (Movie movie : movies) {
             ids.add(movie.getMovieId());
         }
-        Intent intent = new Intent(Intent.ACTION_SYNC, null, mContext, SyncDownloadService.class);
-        intent.putIntegerArrayListExtra("ids", ids);
-        mContext.startService(intent);
 
         Log.w("SYNC", "COMPLETE");
+
+        boolean isOk = true;
+        ArrayList<Movie> updatedMovies = new ArrayList<>();
+
+        RetrofitRestClient restClient = new RetrofitRestClient();
+
+        for (Integer id : ids) {
+            try {
+                Log.w("SYNC", "SYNCING MOVIE #"+id);
+                Movie movie = restClient.getApiService().getMovieById(Singleton.API_KEY, id);
+                updatedMovies.add(movie);
+            } catch (Exception e) {
+                Log.w("SYNC", "SYNC FAILED - EXCEPTION OCCURRED WHEN FETCHING MOVIE #"+id);
+                isOk = false;
+            }
+        }
+        // Sync only if no download failure occurs
+        if (isOk) {
+            for (Movie movie : updatedMovies) {
+                // Update
+                manager.updateMovie(movie);
+            }
+        }
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(mContext)
