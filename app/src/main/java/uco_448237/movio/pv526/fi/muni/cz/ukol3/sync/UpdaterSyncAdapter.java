@@ -7,8 +7,6 @@ import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Build;
@@ -143,8 +141,6 @@ public class UpdaterSyncAdapter extends AbstractThreadedSyncAdapter {
             ids.add(movie.getMovieId());
         }
 
-        Log.w("SYNC", "COMPLETE");
-
         boolean isOk = true;
         ArrayList<Movie> updatedMovies = new ArrayList<>();
 
@@ -153,8 +149,12 @@ public class UpdaterSyncAdapter extends AbstractThreadedSyncAdapter {
         for (Integer id : ids) {
             try {
                 Log.w("SYNC", "SYNCING MOVIE #"+id);
-                Movie movie = restClient.getApiService().getMovieById(Singleton.API_KEY, id);
-                updatedMovies.add(movie);
+                Movie newMovie = restClient.getApiService().getMovieById(Singleton.API_KEY, id);
+                Movie oldMovie = manager.getMovieByMovieId(id);
+                if (!oldMovie.equals(newMovie)) {
+                    // Movie will be updated
+                    updatedMovies.add(newMovie);
+                }
             } catch (Exception e) {
                 Log.w("SYNC", "SYNC FAILED - EXCEPTION OCCURRED WHEN FETCHING MOVIE #"+id);
                 isOk = false;
@@ -166,13 +166,16 @@ public class UpdaterSyncAdapter extends AbstractThreadedSyncAdapter {
                 // Update
                 manager.updateMovie(movie);
             }
+            Log.w("SYNC", "COMPLETE");
+        } else {
+            Log.w("SYNC", "FAILED");
         }
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(mContext)
                         .setSmallIcon(R.drawable.warning_icon)
                         .setContentTitle(mContext.getString(R.string.sync))
-                        .setContentText(mContext.getString(R.string.sync_done));
+                        .setContentText(mContext.getString(R.string.sync_done) + mContext.getString(R.string.sync_updated) + updatedMovies.size() + mContext.getString(R.string.sync_movies));
         NotificationManager nm = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         nm.notify(0, mBuilder.build());
 
