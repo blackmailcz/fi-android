@@ -1,111 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/movie_detail_bg">
+    android:id="@+id/movie_detail_bg"
+    >
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
+        android:id="@+id/content_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_height="match_parent"
+        >
 
-        <ScrollView
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/scrollView2"
-            android:layout_gravity="center_horizontal" >
-
+            >
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp">
+                >
 
-                <LinearLayout
-                    android:orientation="vertical"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal">
-
-                    <FrameLayout
-                        android:orientation="horizontal"
+                    >
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal">
+                        android:orientation="vertical"
+                        >
+                        <ImageView
+                            android:id="@+id/movie_background_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="220dp"
+                            android:scaleType="centerCrop"
+                            android:contentDescription="@null"
+                            />
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
+                            android:background="?attr/colorPrimary"
+                            >
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:padding="5dp"
+                                android:layout_marginLeft="150dp"
+                                android:layout_marginStart="150dp"
+                                >
+                                <TextView
+                                    android:id="@+id/details_name"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="9"
+                                    android:ellipsize="end"
+                                    android:gravity="bottom"
+                                    android:textSize="35dp"
+                                    android:textIsSelectable="false" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/name"
-                            android:id="@+id/textView3"
-                            android:layout_gravity="left"
-                            android:textStyle="bold" />
+                                <TextView
+                                    android:id="@+id/details_release_date"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="2"
+                                    android:gravity="bottom|start"
+                                    android:layout_gravity="bottom"
+                                    android:singleLine="true"
+                                    />
+                            </LinearLayout>
+                        </FrameLayout>
+                    </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="Medium Text"
-                            android:id="@+id/details_name"
-                            android:layout_gravity="right"
-                            android:textAlignment="gravity" />
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/release_date"
-                            android:id="@+id/textView2"
-                            android:layout_gravity="left|center_horizontal"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="Medium Text"
-                            android:id="@+id/details_release_date"
-                            android:layout_gravity="right" />
-                    </FrameLayout>
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/details_cover"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="10dp"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/movie_detail_poster" />
+                    <ImageView
+                        android:id="@+id/details_cover"
+                        android:layout_width="wrap_content"
+                        android:layout_height="180dp"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitCenter"
+                        android:contentDescription="@null"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="bottom|left|start"
+                        />
+                </FrameLayout>
             </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ly_bar_bottom"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="right"
-        android:orientation="horizontal">
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/button_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="28dp"
-            android:src="@drawable/plus_icon"
-            app:borderWidth="0dp"
-            app:elevation="6dp"
-            app:pressedTranslationZ="12dp" />
-    </LinearLayout>
-</RelativeLayout>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/button_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:clickable="true"
+                android:src="@drawable/plus_icon"
+                app:layout_anchor="@id/movie_background_image"
+                app:layout_anchorGravity="bottom|right|end"
+                />
+        </android.support.design.widget.CoordinatorLayout>
+    </ScrollView>
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        tools:visibility="gone"
+        />
+</FrameLayout>
