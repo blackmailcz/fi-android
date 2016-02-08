@@ -26,7 +26,7 @@ import uco_448237.movio.pv526.fi.muni.cz.ukol3.singleton.Singleton;
 /**
  * Created by BlackMail on 4.1.2016.
  */
-public class UpdaterSyncAdapter extends AbstractThreadedSyncAdapter {
+public class    UpdaterSyncAdapter extends AbstractThreadedSyncAdapter {
 
     // Interval at which to sync with the server, in seconds.
     public static final int SYNC_INTERVAL = 60 * 60 * 24; //day
